@@ -43,8 +43,9 @@ test-cover: ## Run tests with coverage report
 	$(GOTEST) -v -race -count=1 -coverprofile=coverage.out ./...
 	$(GOCMD) tool cover -html=coverage.out -o coverage.html
 	@echo "==> Coverage report available at coverage.html"
-	# Open the report automatically if on macOS
-	@if [ "$$(uname)" = "Darwin" ]; then open coverage.html; fi
+	# Open the report automatically if on macOS or Linux (xdg-open)
+	@if [ "$$(uname)" = "Darwin" ]; then open coverage.html; \
+	elif [ "$$(uname)" = "Linux" ] && command -v xdg-open >/dev/null 2>&1; then xdg-open coverage.html; fi
 
 lint: ## Run golangci-lint
 	@echo "==> Running linter..."
@@ -94,5 +95,4 @@ help: ## Display this help message
 	@echo "Usage: make [target]"
 	@echo ""
 	@echo "Targets:"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
-		awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
