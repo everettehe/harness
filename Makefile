@@ -43,6 +43,8 @@ test-cover: ## Run tests with coverage report
 	$(GOTEST) -v -race -count=1 -coverprofile=coverage.out ./...
 	$(GOCMD) tool cover -html=coverage.out -o coverage.html
 	@echo "==> Coverage report available at coverage.html"
+	# Open the report automatically if on macOS
+	@if [ "$$(uname)" = "Darwin" ]; then open coverage.html; fi
 
 lint: ## Run golangci-lint
 	@echo "==> Running linter..."
