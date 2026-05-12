@@ -67,7 +67,7 @@ clean: ## Remove build artifacts
 	@echo "==> Cleaning build artifacts..."
 	@rm -rf $(BUILD_DIR)
 	@rm -f coverage.out coverage.html
-	$(GOCMD) clean -cache
+	# Note: skipping 'go clean -cache' here to keep the module cache warm between runs
 
 docker-build: ## Build Docker image
 	@echo "==> Building Docker image $(DOCKER_IMAGE):$(DOCKER_TAG)..."
@@ -92,7 +92,4 @@ download: ## Download Go module dependencies
 	$(GOCMD) mod download
 
 help: ## Display this help message
-	@echo "Usage: make [target]"
-	@echo ""
-	@echo "Targets:"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
